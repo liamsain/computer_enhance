@@ -5,6 +5,14 @@ describe('getInstructionsFromBuffer', function () {
   it('should return correct instructions from binary', function () {
     const tests = [
       {
+        hex: 'b80100',
+        expected: ['mov ax, 1']
+      },
+      {
+        hex: 'bb0200',
+        expected: ['mov bx, 2']
+      },
+      {
         // reg to reg
         hex: '89de88c6',
         expected: ['mov si, bx', 'mov dh, al']

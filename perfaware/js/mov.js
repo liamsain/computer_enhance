@@ -90,7 +90,6 @@ export function movRegMemToFromRegMem(b) {
       return true;
     }
     if (mod == '01') {
-      debugger;
       return bytes.length === 3;
     }
     if (mod == '10') {
