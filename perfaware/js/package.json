@@ -1,0 +1,21 @@
+{
+  "name": "8086",
+   "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha *test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liamsain/8086.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liamsain/8086/issues"
+  },
+  "homepage": "https://github.com/liamsain/8086#readme"
+}
