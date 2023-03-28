@@ -14,7 +14,6 @@ export function sim() {
   const regNames = Object.keys(localRegs);
   function executeIns(ins) {
     const splitIns = ins.replaceAll(',', '').split(' ');
-    debugger;
     const dest = splitIns[1];
     const src = splitIns[2];
     if (regNames.includes(src)) {
