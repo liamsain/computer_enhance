@@ -1,6 +1,16 @@
 import { RegLookup, AddressCalcLookup } from './consts/consts.js';
 import { binToInt16, binToInt8 } from './helpers.js';
 
+export function decodeInstruction(firstByte) {
+  const bytes = [firstByte];
+  function getIns() {
+    // {bytes: [], text: 'mov ax, 8', insType: InsType.Mov, src: 8, dest: 'ax'}
+  }
+  function insComplete() {}
+  function pushByte(b) { bytes.push(b); }
+  return { insComplete, pushByte, getIns} 
+}
+
 export function movImmedToReg(b) {
   const bytes = [b];
   function getIns() {

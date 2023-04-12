@@ -2,13 +2,6 @@ import { MovTypes, ArithmeticTypes, getAllJumpTypeBytes } from './consts/consts.
 import { movRegMemToFromRegMem, movImmedToReg } from './mov.js';
 import { arithmetic } from './arithmetic.js';
 import { jump } from './jumps.js';
-    // dField: 1 = reg field in second byte is dest, 0= reg field in second byte is src
-    // const dField = firstByte[6];
-
-    // wField: 0 = byte op, 1 = word op
-    // const wField = firstByte[7];
-
-    // sField: firstByte[6], 0=no sign extension, 1=sign extend 8-bit immed data to 16 bits if w=1
 
     /* mod: 
       00=mem mode no displacement,
