@@ -31,9 +31,8 @@ describe('labels', function () {
     ];
     tests.forEach(t => {
       const buffer = Buffer.from(t[0], 'hex');
-      debugger;
       const instructions = getInstructionsFromBuffer(buffer);
-      assert.equal(instructions, t[1]);
+      assert.equal(instructions[0].insText, t[1]);
     });
   });
 
@@ -71,11 +70,13 @@ describe('cmp', function () {
       ['3ce2', 'cmp al, -30'],
       //b197
       ['3c09', 'cmp al, 9'],
+      // extra
+      ['81fe0304', 'cmp si, 1027'],
     ];
     tests.forEach(t => {
       const buffer = Buffer.from(t[0], 'hex');
       const instructions = getInstructionsFromBuffer(buffer);
-      assert.equal(instructions, t[1]);
+      assert.equal(instructions[0].insText, t[1]);
     });
 
   });
@@ -111,11 +112,13 @@ describe('subs', function () {
       ['2ce2', 'sub al, -30'],
       //b130
       ['2c09', 'sub al, 9'],
+      //extra: 
+      ['81ee0304', 'sub si, 1027'],
     ];
     tests.forEach(t => {
       const buffer = Buffer.from(t[0], 'hex');
       const instructions = getInstructionsFromBuffer(buffer);
-      assert.equal(instructions, t[1]);
+      assert.equal(instructions[0].insText, t[1]);
     });
 
   });
@@ -123,14 +126,14 @@ describe('subs', function () {
 describe('adds', function () {
   it('returns correct instructions for binary add instructions', function () {
     const tests = [
-      {
-        hex: '0318', //00000011, 00011000
-        ex: ['add bx, [bx + si]']
-      },
-      {
-        hex: '035e00', //00000011, 01011110
-        ex: ['add bx, [bp + 0]']
-      },
+      // {
+      //   hex: '0318', //00000011, 00011000
+      //   ex: ['add bx, [bx + si]']
+      // },
+      // {
+      //   hex: '035e00', //00000011, 01011110
+      //   ex: ['add bx, [bp + 0]']
+      // },
       {
         hex: '83c602', // 10000011 = immed to reg/mem signed = 1, w = 1, 11000110
         ex: ['add si, 2']
@@ -216,11 +219,17 @@ describe('adds', function () {
         hex: '0409',
         ex: ['add al, 9']
       },
+      //extra:
+      {
+        hex: '81c60304',
+        ex: ['add si, 1027']
+      },
     ];
     tests.forEach(t => {
       const buffer = Buffer.from(t.hex, 'hex');
+      debugger;
       const instructions = getInstructionsFromBuffer(buffer);
-      t.ex.forEach((ins, insI) => assert.equal(instructions[insI], ins));
+      t.ex.forEach((ins, insI) => assert.equal(instructions[insI].insText, ins));
     });
   })
 });

@@ -57,7 +57,7 @@ describe('getInstructionsFromBuffer', function () {
     tests.forEach(t => {
       const buffer = Buffer.from(t.hex, 'hex');
       const instructions = getInstructionsFromBuffer(buffer);
-      t.expected.forEach((ins, insI) => assert.equal(instructions[insI], ins));
+      t.expected.forEach((ins, insI) => assert.equal(instructions[insI].insText, ins));
     });
   });
 });

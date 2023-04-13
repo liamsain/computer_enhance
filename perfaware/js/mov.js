@@ -37,8 +37,8 @@ export function movImmedToReg(b) {
     return bytes.length === 3;
   }
   function pushByte(b) { bytes.push(b) }
-
-  return { getIns, insComplete, pushByte };
+  function getBytes() { return bytes; }
+  return { getIns, insComplete, pushByte, getBytes };
 }
 
 export function movRegMemToFromRegMem(b) {
@@ -112,5 +112,8 @@ export function movRegMemToFromRegMem(b) {
   function pushByte(b) {
     bytes.push(b);
   }
-  return { getIns, insComplete, pushByte };
+  function getBytes() {
+    return bytes;
+  }
+  return { getIns, insComplete, pushByte, getBytes };
 }

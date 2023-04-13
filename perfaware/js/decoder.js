@@ -20,7 +20,7 @@ export function getInstructionsFromBuffer(buf) {
     if (currentIns) {
       currentIns.pushByte(currentByte);
       if (currentIns.insComplete()) {
-        instructions.push(currentIns.getIns());
+        instructions.push({insText: currentIns.getIns(), bytes: currentIns.getBytes()});
         currentIns = null;
       }
     } else {

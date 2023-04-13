@@ -1,5 +1,6 @@
 import { RegLookup, AddressCalcLookup } from './consts/consts.js';
 import { binToInt16, binToInt8 } from './helpers.js';
+const ImmedToRegMem = '100000';
 const AddTypes = {
   RegMemWithRegToEither: '000000',
   ImmedToRegMem: '100000',
@@ -25,7 +26,7 @@ function getAction(firstByte, secondByte) {
     action = 'cmp'
   }
 
-  if (firstByte.startsWith(AddTypes.ImmedToRegMem)) {
+  if (firstByte.startsWith(ImmedToRegMem)) {
     const identifier = secondByte.slice(2, 5);
     if (identifier == '101') {
       action = 'sub';
@@ -76,11 +77,11 @@ export function arithmetic(b) {
     if (mod == '00') {
       firstReg = `${wField == 1 ? RegLookup[reg].W1 : RegLookup[reg].W0}`;
       secondReg = `[${AddressCalcLookup[rm]}]`;
-      if (firstByte.startsWith(AddTypes.ImmedToRegMem)) {
+      if (firstByte.startsWith(ImmedToRegMem)) {
         if (rm == '110') {
           const binData = `${bytes[3]}${bytes[2]}`;
           const displacement = binToInt16(binData);
-          firstReg = `word [${displacement}]`; 
+          firstReg = `word [${displacement}]`;
           secondReg = binToInt8(bytes[4]);
         } else {
           firstReg = wField == 1 ? 'word ' + secondReg : 'byte ' + secondReg;
@@ -100,15 +101,22 @@ export function arithmetic(b) {
       firstReg = `${wField == 1 ? RegLookup[reg].W1 : RegLookup[reg].W0}`
       secondReg = `[${AddressCalcLookup[rm]}${displacementText}]`;
 
-      if (firstByte.startsWith(AddTypes.ImmedToRegMem)) {
+      if (firstByte.startsWith(ImmedToRegMem)) {
         firstReg = wField == 1 ? 'word ' + secondReg : 'byte ' + secondReg;
         secondReg = binToInt8(bytes[4]);
       }
 
     } else if (mod == '11') {
-      if (firstByte.startsWith(AddTypes.ImmedToRegMem)) {
+      if (firstByte.startsWith(ImmedToRegMem)) {
         firstReg = `${wField == 1 ? RegLookup[rm].W1 : RegLookup[rm].W0}`
-        secondReg = binToInt8(bytes[2]);
+        if (firstByte[6] == 0 && firstByte[7] == 1) {
+          const binData = `${bytes[3]}${bytes[2]}`
+          secondReg = binToInt16(binData);
+        } else {
+          secondReg = binToInt8(bytes[2]);
+        }
+
+
       } else {
         firstReg = `${wField == 1 ? RegLookup[reg].W1 : RegLookup[reg].W0}`
         secondReg = `${wField == 1 ? RegLookup[rm].W1 : RegLookup[rm].W0}`
@@ -134,7 +142,7 @@ export function arithmetic(b) {
     const mod = secondByte.slice(0, 2);
     const rm = secondByte.slice(5); // register/memory. 
     if (mod == '00') {
-      if (firstByte.startsWith(AddTypes.ImmedToRegMem)) {
+      if (firstByte.startsWith(ImmedToRegMem)) {
         if (rm == '110') {
           return bytes.length == 5
         }
@@ -147,16 +155,24 @@ export function arithmetic(b) {
       return bytes.length == 3;
     }
     if (mod == '10') {
-      if (firstByte.startsWith(AddTypes.ImmedToRegMem)) {
+      if (firstByte.startsWith(ImmedToRegMem)) {
         return bytes.length == 5;
       }
 
       return bytes.length == 4;
     }
     if (mod == '11') {
+      if (firstByte.startsWith(ImmedToRegMem)) {
+        // s=1 then if w = 1, extend immed data to 16
+        if (firstByte[6] == 0 && firstByte[7] == 1) {
+          return bytes.length == 4
+        }
+      }
+
       if (firstByte[6] == 1) {
         return bytes.length == 3;
       }
+
       return bytes.length == 2;
     }
     return true;
@@ -165,5 +181,8 @@ export function arithmetic(b) {
   function pushByte(b) {
     bytes.push(b);
   }
-  return { getIns, insComplete, pushByte };
+  function getBytes() {
+    return bytes;
+  }
+  return { getIns, insComplete, pushByte, getBytes };
 }

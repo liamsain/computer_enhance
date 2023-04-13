@@ -7,7 +7,8 @@ export function jump(b) {
   }
   function insComplete() { return bytes.length == 2 }
   function pushByte(b) { bytes.push(b) }
+  function getBytes() { return bytes; }
 
-  return { getIns, insComplete, pushByte }
+  return { getIns, insComplete, pushByte, getBytes }
 
 }
