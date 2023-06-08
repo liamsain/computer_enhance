@@ -1,3 +1,5 @@
+// if result of sub or add is 0, zero flag is 1, else 0
+// signed: is highest bit of value set?
 const Regs = {
   ax: 0,
   bx: 0,
@@ -41,6 +43,7 @@ export function sim() {
         // i.e. mov ax, 1
         localRegs[dest] = src;
       }
+
     } else if (opType === OpTypes.Add) {
       if (regNames.includes(src)) {
         // i.e. mov dx, sp
@@ -50,6 +53,8 @@ export function sim() {
         localRegs[dest] += src;
       }
       localFlags.Zero = localRegs[dest] == 0 ? 1 : 0;
+      localFlags.Signed = Number(localRegs[dest]).toString(2)[0] == '1';
+
 
     } else if (opType === OpTypes.Sub) {
       if (regNames.includes(src)) {
@@ -60,10 +65,22 @@ export function sim() {
         localRegs[dest] -= src;
       }
       localFlags.Zero = localRegs[dest] == 0 ? 1 : 0;
-      
-    } else if (opType === OpTypes.Cmp) {
+      localFlags.Signed = Number(localRegs[dest]).toString(2)[0] == '1';
 
+
+    } else if (opType === OpTypes.Cmp) {
+      let val = localRegs[dest];
+      if (regNames.includes(src)) {
+        // i.e. mov dx, sp
+        val -= localRegs[src];
+      } else {
+        // i.e. mov ax, 1
+        val -= src;
+      }
+      localFlags.Zero = val == 0 ? 1 : 0;
+      localFlags.Signed = Number(val).toString(2)[0] == '1';
     }
+
   }
   function getRegs() {
     return localRegs;

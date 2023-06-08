@@ -126,14 +126,14 @@ describe('subs', function () {
 describe('adds', function () {
   it('returns correct instructions for binary add instructions', function () {
     const tests = [
-      // {
-      //   hex: '0318', //00000011, 00011000
-      //   ex: ['add bx, [bx + si]']
-      // },
-      // {
-      //   hex: '035e00', //00000011, 01011110
-      //   ex: ['add bx, [bp + 0]']
-      // },
+      {
+        hex: '0318', //00000011, 00011000
+        ex: ['add bx, [bx + si]']
+      },
+      {
+        hex: '035e00', //00000011, 01011110
+        ex: ['add bx, [bp + 0]']
+      },
       {
         hex: '83c602', // 10000011 = immed to reg/mem signed = 1, w = 1, 11000110
         ex: ['add si, 2']

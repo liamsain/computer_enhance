@@ -10,7 +10,7 @@ describe('sim', function () {
     const buffer = Buffer.from(hex, 'hex');
     const instructions = getInstructionsFromBuffer(buffer);
     for (let ins of instructions) {
-      simulator.executeIns(ins);
+      simulator.executeIns(ins.insText);
     }
     assert.equal(simulator.getReg('ax'), 1);
     assert.equal(simulator.getReg('bx'), 2);
@@ -28,7 +28,7 @@ describe('sim', function () {
     console.log(buffer);
     const instructions = getInstructionsFromBuffer(buffer);
     for (let ins of instructions) {
-      simulator.executeIns(ins);
+      simulator.executeIns(ins.insText);
     }
 
     assert.equal(simulator.getReg('ax'), 4);
@@ -49,8 +49,10 @@ describe('sim', function () {
     const buffer = Buffer.from(hexString, 'hex');
     const instructions = getInstructionsFromBuffer(buffer);
     for (let ins of instructions) {
-      simulator.executeIns(ins);
+      simulator.executeIns(ins.insText);
     }
+    console.log(simulator.getRegs());
+    console.log(simulator.getFlags());
 
 
 
